@@ -1,0 +1,1 @@
+export const List = ['Games', 'Tmkoc', 'Sports', 'IPL','RCB','Cricket' ,'Football', 'Hockey', 'Movies']
