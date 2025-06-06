@@ -4,6 +4,7 @@ const VideoCard = ({ info }) => {
     const snippet = info?.snippet || {};
     const statistics = info?.statistics || {};
 
+
     const { channelTitle, thumbnails, title } = snippet;
     const viewCount = statistics.viewCount || 0;
 
