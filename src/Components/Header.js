@@ -1,14 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { toggleMenu } from '../redux/appSlice';
+import { YOUTUBE_SEARCH_API } from '../constants';
 
 const Header = () => {
     const dispatch = useDispatch();
+
+    const [searchQuery, setSearchQuery] = useState('');
 
     const toggleMenuHandler = () => {
         dispatch(toggleMenu());
     };
 
+    useEffect(() => {
+        //Debouncing -> Better user experience + reduce api calls(optimization)
+        const timer = setTimeout(() => {
+            getSuggestions();
+        }, 3000);
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [searchQuery]);
+
+    const getSuggestions = async () => {
+        console.log('API CALL', searchQuery);
+        const data = await fetch(YOUTUBE_SEARCH_API + searchQuery);
+        const result = await data.json();
+
+        console.log('check10', result);
+    };
     return (
         <div className="grid grid-flow-col p-5 m-2 shadow-lg">
             <div className="col-span-1 flex">
@@ -25,7 +46,11 @@ const Header = () => {
                 />
             </div>
             <div className="col-span-10 ml-80">
-                <input className="w-1/2 p-2 border  border-gray-400 rounded-l-full" type="text"></input>
+                <input
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-1/2 p-2 border  border-gray-400 rounded-l-full"
+                    type="text"></input>
                 <button className="border border-gray-400 rounded-r-full py-2 px-5">🔍</button>
             </div>
             <div className="col-span-1">

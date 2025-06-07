@@ -1,6 +1,6 @@
 import React from 'react';
 
-const VideoCard = ({ info }) => {
+const VideoCard = ({ info, isAd }) => {
     const snippet = info?.snippet || {};
     const statistics = info?.statistics || {};
 
@@ -15,9 +15,9 @@ const VideoCard = ({ info }) => {
                 <li className="font-bold">{title}</li>
                 <li>{channelTitle}</li>
                 <li>{viewCount} views</li>
+                 {isAd && <li className="text-white font-bold py-2">Ad</li>}
             </ul>
         </div>
     );
 };
-
 export default VideoCard;
