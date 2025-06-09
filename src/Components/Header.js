@@ -4,9 +4,12 @@ import { toggleMenu } from '../redux/appSlice';
 import { YOUTUBE_SEARCH_API } from '../constants';
 
 const Header = () => {
+
     const dispatch = useDispatch();
 
     const [searchQuery, setSearchQuery] = useState('');
+    const [suggestions, setSuggestions] = useState([])
+    const [showSuggestions, setShowSuggestions] = useState(false)
 
     const toggleMenuHandler = () => {
         dispatch(toggleMenu());
@@ -16,7 +19,7 @@ const Header = () => {
         //Debouncing -> Better user experience + reduce api calls(optimization)
         const timer = setTimeout(() => {
             getSuggestions();
-        }, 3000);
+        }, 200);
 
         return () => {
             clearTimeout(timer);
@@ -26,10 +29,11 @@ const Header = () => {
     const getSuggestions = async () => {
         console.log('API CALL', searchQuery);
         const data = await fetch(YOUTUBE_SEARCH_API + searchQuery);
-        const result = await data.json();
+        const json = await data.json();
 
-        console.log('check10', result);
+        setSuggestions(json[1]);
     };
+    console.log('check20',suggestions)
     return (
         <div className="grid grid-flow-col p-5 m-2 shadow-lg">
             <div className="col-span-1 flex">
@@ -45,13 +49,25 @@ const Header = () => {
                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/YouTube_Logo_2017.svg/2560px-YouTube_Logo_2017.svg.png"
                 />
             </div>
-            <div className="col-span-10 ml-80">
+            <div className="col-span-10 ml-80 relative">
+                <div>
                 <input
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-1/2 p-2 border  border-gray-400 rounded-l-full"
-                    type="text"></input>
+                    className="px-5 w-1/2 p-2 border  border-gray-400 rounded-l-full"
+                    type="text"
+                    onFocus={()=>setShowSuggestions(true)}
+                    onBlur = {()=> setShowSuggestions(false)}
+                    
+                    ></input>
                 <button className="border border-gray-400 rounded-r-full py-2 px-5">🔍</button>
+            </div>
+            
+           {showSuggestions && <div className='absolute bg-white px-5 py-2 w-[36rem] shadow-lg rounded-lg border border-gray-100'>
+                <ul>
+                 {suggestions.map(s => <li key= {s.name} className='py-2 shadow-sm hover:bg-gray-100'>{s}</li>)}     
+                </ul>
+            </div> }
             </div>
             <div className="col-span-1">
                 <img
