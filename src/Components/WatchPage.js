@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { onCloseMenu } from '../redux/appSlice';
+import CommentsContainer from './CommentsContainer';
 
 const WatchPage = () => {
     const dispatch = useDispatch();
@@ -16,10 +17,11 @@ const WatchPage = () => {
 
     console.log('check12', `https://www.youtube.com/embed/${videoId}`);
     return (
+        <div className='flex flex-col'>
         <div className="px-5">
             <iframe
-                width="1200"
-                height="600"
+                width="1000"
+                height="400"
                 src={`https://www.youtube.com/embed/${videoId}?si=VDxM0T4sqcjMSfqz`}
                 title="YouTube video player"
                 frameBorder="0"
@@ -27,6 +29,8 @@ const WatchPage = () => {
                 referrerpolicy="strict-origin-when-cross-origin"
                 allowFullscreen></iframe>
         </div>
+        <CommentsContainer />
+      </div>
     );
 };
 export default WatchPage;
